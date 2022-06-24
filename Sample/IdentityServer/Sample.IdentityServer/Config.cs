@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.Models;
+using IdentityServer4.Test;
 
 namespace Sample.IdentityServer
 {
@@ -32,6 +33,27 @@ namespace Sample.IdentityServer
                 AllowedGrantTypes =  GrantTypes.ClientCredentials,
                 //允许的api范围
                 AllowedScopes = { "sample_api" }
+            },
+             new Client
+            {
+                ClientId = "sample_pass_client",
+                ClientSecrets =
+                {
+                    new Secret("sample_client_secret".Sha256())
+                },
+                AllowedGrantTypes =  GrantTypes.ResourceOwnerPassword,
+                AllowedScopes = { "sample_api" }
+            }
+        };
+
+        //资源拥有者凭据授权
+        public static List<TestUser> Users => new List<TestUser>
+        {
+            new TestUser
+            {
+                SubjectId ="1",
+                Username ="admin",
+                Password ="123"
             }
         };
     }

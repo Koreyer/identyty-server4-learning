@@ -3,5 +3,6 @@ using Sample.Client;
 
 Console.WriteLine("Hello, World!");
 var a = new Test();
-await a.Get();
+//await a.ClientGet();
+await a.PassGet();
 Console.Read();
