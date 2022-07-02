@@ -1,5 +1,4 @@
 using Microsoft.IdentityModel.Tokens;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,15 +8,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 //注册认证服务
+//Bearer认证方案
 builder.Services.AddAuthentication("Bearer")
-    //Bearer认证方案
     .AddJwtBearer("Bearer", options =>
     {
         //配置委托
         //服务地址
-        options.Authority = "https://localhost:7232";
+        options.Authority = "https://localhost:7199";
         //验证参数  默认不需要吧
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -45,11 +43,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//添加验证
+
+//将身份验证中间件添加到管道中，以便在每次调用主机时自动执行身份验证。
 app.UseAuthentication();
-//授权中间件
+//添加授权中间件以确保匿名客户端无法访问我们的 API 端点。
 app.UseAuthorization();
-//.RequireAuthorization("Apiscope")所有控制器都要验证
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
+//所有控制器都要验证
 app.MapControllers().RequireAuthorization("Apiscope");
 
 app.Run();

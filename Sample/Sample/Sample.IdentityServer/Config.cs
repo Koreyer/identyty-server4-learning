@@ -5,9 +5,11 @@ namespace Sample.IdentityServer
 {
     public static class Config
     {
-        public static IEnumerable<ApiScope> ApiScopes => new[]
+        public static IEnumerable<ApiScope> ApiScopes =>
+        new List<ApiScope>
         {
-            //至少一个
+            //构造函数方式(name,displayName)
+            new ApiScope("api1", "My API"),
             new ApiScope
             {
                 //标志api范围的名称
@@ -41,11 +43,11 @@ namespace Sample.IdentityServer
                 {
                     new Secret("sample_client_secret".Sha256())
                 },
-                AllowedGrantTypes =  GrantTypes.ResourceOwnerPassword,
-                AllowedScopes = { "sample_api" }
+                //组合多个授权类型
+                AllowedGrantTypes =  { GrantType.ClientCredentials, GrantType.ResourceOwnerPassword },
+                AllowedScopes = { "sample_api" , "api1" }
             }
         };
-
         //资源拥有者凭据授权
         public static List<TestUser> Users => new List<TestUser>
         {

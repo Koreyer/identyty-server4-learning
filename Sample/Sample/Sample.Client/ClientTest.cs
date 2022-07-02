@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Sample.Client
 {
-    public class Test
+    public static  class ClientTest
     {
         /// <summary>
         /// 客户端模式请求测试
         /// </summary>
         /// <returns></returns>
-        public async Task ClientGet()
+        public static async Task ClientGet()
         {
 
             //通过IdentityServer获取token
             var client = new HttpClient();
             //获取发现文档
-            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:7232");
+            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:7199");
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
@@ -47,7 +47,7 @@ namespace Sample.Client
             //设置请求头
             apiClient.SetBearerToken(tokenResponse.AccessToken);
             //请求方法
-            var response = await apiClient.GetAsync("https://localhost:7231/demo/get");
+            var response = await apiClient.GetAsync("https://localhost:7078/identity");
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);
@@ -55,19 +55,20 @@ namespace Sample.Client
             }
             var content = await response.Content.ReadAsStringAsync();
             Console.WriteLine(JArray.Parse(content));
-            
+
         }
+
         /// <summary>
         /// 资源拥有者凭据授权请求测试
         /// </summary>
         /// <returns></returns>
-        public async Task PassGet()
+        public static async Task PassGet()
         {
 
             //通过IdentityServer获取token
             var client = new HttpClient();
             //获取发现文档
-            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:7232");
+            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:7199");
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
@@ -79,7 +80,7 @@ namespace Sample.Client
                     Address = disco.TokenEndpoint,
                     ClientId = "sample_pass_client",
                     ClientSecret = "sample_client_secret",
-                    UserName ="admin",
+                    UserName = "admin",
                     Password = "123"
                 });
 
@@ -96,7 +97,7 @@ namespace Sample.Client
             //设置请求头
             apiClient.SetBearerToken(tokenResponse.AccessToken);
             //请求方法
-            var response = await apiClient.GetAsync("https://localhost:7231/demo/get");
+            var response = await apiClient.GetAsync("https://localhost:7078/identity");
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);
